@@ -1,0 +1,32 @@
+#!/bin/bash
+# root-owned helper. No caller-controlled paths, arguments or configuration.
+set -euo pipefail
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+[[ $# = 0 ]]
+cd /
+umask 077
+exec 9>/etc/acp-gateway/add.lock
+flock -x 9
+for ((i=1;i<=64;i++)); do
+ n=lab$i; u=acp-$n; h=/var/lib/$u
+ [[ ! -e /etc/acp-gateway/$n.env ]] || continue
+ ! getent passwd "$u" >/dev/null || continue
+ [[ ! -e $h && ! -L $h ]] || continue
+ useradd --system --user-group --create-home --home-dir "$h" --shell /usr/sbin/nologin "$u"
+ rollback() {
+   systemctl disable --now "acp-admin@$n.socket" "acp-gateway@$n.socket" >/dev/null 2>&1 || :
+   systemctl stop "acp-admin@$n.service" "acp-gateway@$n.service" >/dev/null 2>&1 || :
+   rm -f "/etc/acp-gateway/$n.env" "/etc/acp-gateway/.$n.new"
+   userdel --remove "$u" >/dev/null 2>&1 || :
+ }
+ trap rollback ERR
+ chmod 700 "$h"
+ printf 'AGY_BIN=/opt/acp-gateway/bin/agy\n' > "/etc/acp-gateway/.$n.new"
+ mv "/etc/acp-gateway/.$n.new" "/etc/acp-gateway/$n.env"
+ systemctl enable --now "acp-gateway@$n.socket" >/dev/null
+ systemctl enable --now "acp-admin@$n.socket" >/dev/null
+ trap - ERR
+ printf '%s\n' "$n"
+ exit 0
+done
+exit 3

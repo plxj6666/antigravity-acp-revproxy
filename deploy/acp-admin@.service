@@ -1,0 +1,19 @@
+[Unit]
+Description=Antigravity account enrollment %i
+Requires=acp-admin@%i.socket
+After=acp-admin@%i.socket
+[Service]
+EnvironmentFile=/etc/acp-gateway/admin-origin.env
+User=acp-%i
+Group=acp-%i
+Sockets=acp-admin@%i.socket
+Environment=HOME=/var/lib/acp-%i
+WorkingDirectory=/opt/acp-gateway
+ExecStart=/opt/acp-gateway/.venv/bin/python /opt/acp-gateway/deploy/admin.py
+UMask=0077
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/acp-%i
+LimitCORE=0

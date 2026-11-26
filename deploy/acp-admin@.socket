@@ -1,0 +1,10 @@
+[Unit]
+Description=Private enrollment socket %i
+[Socket]
+ListenStream=/run/acp-gateway-sockets/admin-%i.sock
+SocketMode=0660
+SocketUser=root
+SocketGroup=www-data
+RemoveOnStop=true
+[Install]
+WantedBy=sockets.target

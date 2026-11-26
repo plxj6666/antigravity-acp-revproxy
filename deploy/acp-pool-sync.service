@@ -1,0 +1,6 @@
+[Unit]
+Description=Validate authenticated ACP pool membership and reload Nginx on change
+After=nginx.service
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/acp-pool-sync

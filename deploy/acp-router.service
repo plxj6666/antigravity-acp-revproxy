@@ -1,0 +1,16 @@
+[Unit]
+Description=ACP affinity router
+Requires=acp-router.socket
+After=acp-router.socket
+[Service]
+User=acp-router
+Group=www-data
+Sockets=acp-router.socket
+ExecStart=/opt/acp-gateway/.venv/bin/python /opt/acp-gateway/deploy/acp_router.py
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+InaccessiblePaths=-/etc/acp-gateway
+RestrictAddressFamilies=AF_UNIX
+Restart=on-failure

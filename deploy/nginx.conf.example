@@ -1,0 +1,26 @@
+# Install in nginx http context ONLY after replacing the domain and obtaining its cert.
+upstream lab_acp_accounts {
+    zone lab_acp_accounts 64k;
+    # Equal-weight round robin. Each port belongs to one separate Linux user.
+    server 127.0.0.1:18781 max_fails=0;
+    # Enable after enrolling and testing the second account:
+    # server 127.0.0.1:18782 max_fails=0;
+}
+server {
+    listen 443 ssl;
+    server_name lab-api.example.invalid;
+    ssl_certificate /etc/letsencrypt/live/lab-api.example.invalid/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/lab-api.example.invalid/privkey.pem;
+    client_max_body_size 12m;
+    access_log off;
+    location / {
+        proxy_pass http://lab_acp_accounts;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_cache off;
+        proxy_next_upstream off;
+        proxy_read_timeout 1150s;
+    }
+}

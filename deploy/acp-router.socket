@@ -1,0 +1,10 @@
+[Unit]
+Description=ACP affinity router socket
+[Socket]
+ListenStream=/run/acp-gateway-sockets/router.sock
+SocketMode=0660
+SocketGroup=www-data
+DirectoryMode=0755
+RemoveOnStop=yes
+[Install]
+WantedBy=sockets.target

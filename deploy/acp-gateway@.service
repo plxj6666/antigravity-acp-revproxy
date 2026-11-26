@@ -1,0 +1,30 @@
+[Unit]
+Description=Lab ACP gateway account %i
+Requires=acp-gateway@%i.socket
+After=network-online.target acp-gateway@%i.socket
+Wants=network-online.target
+
+[Service]
+Type=simple
+Sockets=acp-gateway@%i.socket
+User=acp-%i
+Group=acp-%i
+WorkingDirectory=/opt/acp-gateway
+Environment=ACP_SLOT=%i
+Environment=HOME=/var/lib/acp-%i
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=/etc/acp-gateway/shared.env
+EnvironmentFile=/etc/acp-gateway/%i.env
+ExecStart=/opt/acp-gateway/.venv/bin/python /opt/acp-gateway/gateway.py
+Restart=on-failure
+RestartSec=3
+KillMode=control-group
+UMask=0077
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/acp-%i
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

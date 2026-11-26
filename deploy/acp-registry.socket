@@ -1,0 +1,7 @@
+[Socket]
+ListenStream=/run/acp-gateway-sockets/registry.sock
+SocketMode=0660
+SocketGroup=www-data
+RemoveOnStop=true
+[Install]
+WantedBy=sockets.target

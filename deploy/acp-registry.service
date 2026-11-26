@@ -1,0 +1,11 @@
+[Unit]
+Description=Antigravity slot catalog
+Requires=acp-registry.socket
+[Service]
+EnvironmentFile=/etc/acp-gateway/admin-origin.env
+User=acp-registry
+Group=acp-registry
+WorkingDirectory=/opt/acp-gateway/deploy
+ExecStart=/opt/acp-gateway/.venv/bin/python /opt/acp-gateway/deploy/registry.py
+PrivateTmp=yes
+UMask=0077
