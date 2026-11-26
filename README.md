@@ -53,15 +53,9 @@ curl -fsSN "$BASE/v1/chat/completions" \
 
 四种协议共享同一条 ACP 推理链路，支持文本、流式输出、内联图片及客户端工具续接，**不是四家官方 API 的完整实现**。不会代为下载图片 URL，不提供永久 Responses 存储，不保证上游缓存命中。额度面板是账号侧的额度快照，不是逐请求账单。
 
-## 文档与验证
+## 使用文档
 
 - [客户端配置](CLIENTS.md)：Codex CLI、Claude Code、Gemini CLI、Antigravity CLI。
 - [协议示例与限制](docs/protocols.md)：鉴权头、SSE、图片与请求大小、工具策略、usage 口径。
 - [部署说明](deploy/README.md)：HTTPS、管理员入口、Unix socket、账号槽位与会话路由。
 - [安全与问题报告](SECURITY.md)：信任边界、日志和凭据处理。
-
-完成依赖和词表准备后，可运行离线单测；不需要真实账号、云端模型或生产密钥：
-
-```sh
-.venv/bin/python -Werror -m unittest -v
-```

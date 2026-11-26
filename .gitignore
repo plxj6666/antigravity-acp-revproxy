@@ -26,3 +26,11 @@ artifacts/
 vocab/
 docs/acp-gateway-upgrade-plan.md
 docs/phase5-verification-report.md
+
+# 本地开发、探针与验收记录，不随网关发布
+/test_*.py
+/fixtures/
+/*_probe.py
+/session_smoke.mjs
+/docs/phase2-local-verification.md
+/docs/acp-gateway-references.md
